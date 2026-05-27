@@ -12,7 +12,7 @@ bot.onText(/\/sigma/, (msg) => {
   bot.sendMessage(msg.chat.id, `${username} is sigma!!!🤨`);
 });
 
-// ================== HACK (SHORT) ==================
+// ================== HACK ==================
 bot.onText(/\/hack/, async (msg) => {
   const chatId = msg.chat.id;
 
@@ -35,7 +35,7 @@ bot.onText(/\/hack/, async (msg) => {
   }
 });
 
-// ================== TERMINAL (EPIC MODE) ==================
+// ================== TERMINAL ==================
 bot.onText(/\/terminal/, async (msg) => {
   const chatId = msg.chat.id;
 
@@ -59,10 +59,51 @@ bot.onText(/\/terminal/, async (msg) => {
       message_id: msgObj.message_id
     });
   }
+});
 
-  setTimeout(() => {
-    bot.sendMessage(chatId, "😎 SYSTEM HACK SIMULATION COMPLETE");
-  }, 1200);
+// ================== BOXES IMAGE EFFECT ==================
+bot.onText(/\/boxes/, (msg) => {
+  bot.sendMessage(msg.chat.id, "🟥🟦🟩 RANDOM BOX EFFECT (placeholder version)");
+});
+
+// ================== PIXEL DANCE ==================
+bot.onText(/\/dance/, async (msg) => {
+  const chatId = msg.chat.id;
+
+  const frames = [
+`🟣⬛⬛⬛⬛
+⬛🟣⬛⬛⬛
+⬛⬛🟣⬛⬛
+⬛⬛⬛🟣⬛
+⬛⬛⬛⬛🟣`,
+
+`⬛⬛🟣⬛⬛
+⬛🟣⬛⬛⬛
+🟣⬛⬛⬛⬛
+⬛🟣⬛⬛⬛
+⬛⬛🟣⬛⬛`,
+
+`⬛🟣⬛⬛⬛
+⬛⬛🟣⬛⬛
+⬛⬛⬛🟣⬛
+⬛⬛🟣⬛⬛
+⬛🟣⬛⬛⬛`
+  ];
+
+  let message = await bot.sendMessage(chatId, "💃 starting dance...");
+
+  for (let i = 0; i < 10; i++) {
+    for (let frame of frames) {
+      await new Promise(r => setTimeout(r, 400));
+
+      await bot.editMessageText(frame, {
+        chat_id: chatId,
+        message_id: message.message_id
+      });
+    }
+  }
+
+  bot.sendMessage(chatId, "💃 dance finished!");
 });
 
 // ================== ROBUX TRIGGER ==================
