@@ -14,13 +14,25 @@ bot.onText(/\/ping/, (msg) => {
   bot.sendMessage(msg.chat.id, 'Pong 🏓');
 });
 
-// robux trigger
+// /sigma
+bot.onText(/\/sigma/, (msg) => {
+  const username = msg.from.username
+    ? `@${msg.from.username}`
+    : msg.from.first_name;
+
+  bot.sendMessage(
+    msg.chat.id,
+    `${username} is sigma!!!🤨`
+  );
+});
+
+// Robux trigger (any message containing robux)
 bot.on('message', (msg) => {
   const text = msg.text?.toLowerCase();
 
   if (text && text.includes('robux')) {
-    bot.sendMessage(msg.chat.id, 'NAHHH YOU POOR!UGLY NIGGER! 💀');
+    bot.sendMessage(msg.chat.id, 'NAHHH YOU POOR!! 💀');
   }
 });
 
-console.log('Bot running...');
+console.log('Bot is running...');
