@@ -1,23 +1,9 @@
 const TelegramBot = require('node-telegram-bot-api');
 
 const token = process.env.TELEGRAM_TOKEN;
-
 const bot = new TelegramBot(token, { polling: true });
 
-// ===== interval storage (per chat) =====
-const intervals = {};
-
-// /start
-bot.onText(/\/start/, (msg) => {
-  bot.sendMessage(msg.chat.id, 'Hello 👋 I am online!');
-});
-
-// /ping
-bot.onText(/\/ping/, (msg) => {
-  bot.sendMessage(msg.chat.id, 'Pong 🏓');
-});
-
-// /sigma
+// ================== SIGMA ==================
 bot.onText(/\/sigma/, (msg) => {
   const username = msg.from.username
     ? `@${msg.from.username}`
@@ -26,36 +12,60 @@ bot.onText(/\/sigma/, (msg) => {
   bot.sendMessage(msg.chat.id, `${username} is sigma!!!🤨`);
 });
 
-// /go (safe fast spam)
-bot.onText(/\/go/, (msg) => {
+// ================== HACK (SHORT) ==================
+bot.onText(/\/hack/, async (msg) => {
   const chatId = msg.chat.id;
 
-  if (intervals[chatId]) {
-    return bot.sendMessage(chatId, "Already running ⚠️");
+  const steps = [
+    "Accessing system...",
+    "Bypassing firewall...",
+    "Injecting payload...",
+    "ACCESS GRANTED 😈"
+  ];
+
+  let message = await bot.sendMessage(chatId, "Starting hack...");
+
+  for (let i = 0; i < steps.length; i++) {
+    await new Promise(r => setTimeout(r, 900));
+
+    bot.editMessageText(steps[i], {
+      chat_id: chatId,
+      message_id: message.message_id
+    });
   }
-
-  bot.sendMessage(chatId, "Started sending messages ✅");
-
-  intervals[chatId] = setInterval(() => {
-    bot.sendMessage(chatId, "hi 👋");
-  }, 500); // 1 second (safe limit)
 });
 
-// /stop
-bot.onText(/\/stop/, (msg) => {
+// ================== TERMINAL (EPIC MODE) ==================
+bot.onText(/\/terminal/, async (msg) => {
   const chatId = msg.chat.id;
 
-  if (!intervals[chatId]) {
-    return bot.sendMessage(chatId, "Nothing is running ❌");
+  const lines = [
+    "BOOTING SYSTEM...",
+    "CONNECTING NODE...",
+    "BYPASSING FIREWALL [█░░░░░░░░░] 10%",
+    "BYPASSING FIREWALL [██████░░░░] 60%",
+    "BYPASS COMPLETE [██████████] 100%",
+    "DECRYPTING DATA...",
+    "ACCESS GRANTED ✔"
+  ];
+
+  let msgObj = await bot.sendMessage(chatId, ">>> INITIALIZING TERMINAL...");
+
+  for (let i = 0; i < lines.length; i++) {
+    await new Promise(r => setTimeout(r, 1000));
+
+    bot.editMessageText(lines[i], {
+      chat_id: chatId,
+      message_id: msgObj.message_id
+    });
   }
 
-  clearInterval(intervals[chatId]);
-  delete intervals[chatId];
-
-  bot.sendMessage(chatId, "Stopped 🛑");
+  setTimeout(() => {
+    bot.sendMessage(chatId, "😎 SYSTEM HACK SIMULATION COMPLETE");
+  }, 1200);
 });
 
-// robux trigger
+// ================== ROBUX TRIGGER ==================
 bot.on('message', (msg) => {
   const text = msg.text?.toLowerCase();
 
@@ -64,4 +74,4 @@ bot.on('message', (msg) => {
   }
 });
 
-console.log('Bot running...');
+console.log("Bot is running...");
