@@ -4,6 +4,9 @@ const token = process.env.TELEGRAM_TOKEN;
 
 const bot = new TelegramBot(token, { polling: true });
 
+// ===== interval storage (per chat) =====
+const intervals = {};
+
 // /start
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id, 'Hello 👋 I am online!');
@@ -20,13 +23,39 @@ bot.onText(/\/sigma/, (msg) => {
     ? `@${msg.from.username}`
     : msg.from.first_name;
 
-  bot.sendMessage(
-    msg.chat.id,
-    `${username} is sigma!!!🤨`
-  );
+  bot.sendMessage(msg.chat.id, `${username} is sigma!!!🤨`);
 });
 
-// Robux trigger (any message containing robux)
+// /go (safe fast spam)
+bot.onText(/\/go/, (msg) => {
+  const chatId = msg.chat.id;
+
+  if (intervals[chatId]) {
+    return bot.sendMessage(chatId, "Already running ⚠️");
+  }
+
+  bot.sendMessage(chatId, "Started sending messages ✅");
+
+  intervals[chatId] = setInterval(() => {
+    bot.sendMessage(chatId, "hi 👋");
+  }, 500); // 1 second (safe limit)
+});
+
+// /stop
+bot.onText(/\/stop/, (msg) => {
+  const chatId = msg.chat.id;
+
+  if (!intervals[chatId]) {
+    return bot.sendMessage(chatId, "Nothing is running ❌");
+  }
+
+  clearInterval(intervals[chatId]);
+  delete intervals[chatId];
+
+  bot.sendMessage(chatId, "Stopped 🛑");
+});
+
+// robux trigger
 bot.on('message', (msg) => {
   const text = msg.text?.toLowerCase();
 
@@ -35,4 +64,4 @@ bot.on('message', (msg) => {
   }
 });
 
-console.log('Bot is running...');
+console.log('Bot running...');
