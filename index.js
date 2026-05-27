@@ -19,7 +19,7 @@ bot.on('message', (msg) => {
   const text = msg.text?.toLowerCase();
 
   if (text && text.includes('robux')) {
-    bot.sendMessage(msg.chat.id, 'NAHHH YOU POOR!! 💀');
+    bot.sendMessage(msg.chat.id, 'NAHHH YOU POOR!UGLY NIGGER! 💀');
   }
 });
 
